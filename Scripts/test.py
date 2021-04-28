@@ -17,7 +17,8 @@ def user(name):                     # essentially it takes .../x the x as input 
 @app.route("/", methods=['GET', 'POST'])    # Check for current page if there are HTML forms with the methods Get and Post
 def testbutton():                           #Function you want to define in the HTML form
     if request.method == "POST":            #Check if form method was post
-        return "PONG"                       #Type pong on site
+        pong = "PONG"
+        return render_template("Indexpage.html", testvariable = pong)              #Type pong on site
     else:
         return "Did not work"
 
