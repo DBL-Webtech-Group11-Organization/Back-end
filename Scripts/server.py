@@ -1,4 +1,5 @@
 import os
+import sys
 from os.path import join, dirname, realpath
 from flask import Flask, redirect, url_for, render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
@@ -8,6 +9,9 @@ upload_folder = join(dirname(realpath(__file__)), 'csv_files/')
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = upload_folder
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
+
+csvFilesPos = []
+csvFilesName = []
 
 
 @app.route("/")  # Here the main page is defined
@@ -33,6 +37,7 @@ def testbutton():                           #Function you want to define in the 
 @app.route('/Visualisation', methods=['GET','POST'])
 def upload_file():
     if request.method == 'POST':
+        uploadname = request.form['fileName']
         uploaded_file = request.files['file']                   #Get the file from the request
         filename = secure_filename(uploaded_file.filename)      #Check if someone didnt do something weird with the file
 
@@ -41,8 +46,11 @@ def upload_file():
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:     #Check if it is a valid extension
                 abort(400)
 
+            csvFilesName.append(uploadname)
+            csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload file to correct position
-        return render_template('Visualisation.html')
+        return render_template('Visualisation.html', Arraynames = csvFilesName)
     return render_template('Visualisation')
     
 
