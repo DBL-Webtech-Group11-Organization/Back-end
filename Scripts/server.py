@@ -52,9 +52,9 @@ def upload_file():
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:     #Check if it is a valid extension
                 abort(400)
 
-            csvFilesName.append(uploadname)
-            csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            uploadedFiles.append(uploaded_file)
+            csvFilesName.append(uploadname) #Add the upload name to the array
+            csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload the path to the array
+            uploadedFiles.append(uploaded_file) #upload the file to the uploaded files
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload file to correct position
             return render_template('Visualisation.html', Arraynames = csvFilesName)
 
@@ -63,13 +63,14 @@ def upload_file():
 @app.route('/getData', methods=['GET','POST'])
 def getData():
     if request.method == 'POST':
-        fileSelect = request.form.get('File-Dropdown')
-        filePath = ""
-        if fileSelect in csvFilesName:
+        fileSelect = request.form.get('File-Dropdown') #Get which files the person selected
+        filePath = "" #create an empty path
+        if fileSelect in csvFilesName: #Check if the selected file was uploaded
+            # Get the index of the selected file and add the filepath to the variable
             index = csvFilesName.index(fileSelect)
             filePath = csvFilesPos[index]
 
-
+        #Get the data from the csv file
         data = extract_data(filePath)
         print(data,file=sys.stderr)
     return render_template('Visualisation.html',Arraynames = csvFilesName)
