@@ -40,9 +40,11 @@
 
                 function ShowDropdown(){
 
+                    //Get names array from flask and create a dropdown html element
                     var filesnames = {{ Arraynames|tojson }};
                     var select = document.getElementById("File-Dropdown");
 
+                    //Create for every name in the array a new dropdown element and add it to the menu
                     for (let i = 0; i < filesnames.length; i++){
                         var opt = filesnames[i];
                         var el = document.createElement("option");
