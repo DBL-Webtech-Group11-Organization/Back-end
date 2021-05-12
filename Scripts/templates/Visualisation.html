@@ -21,16 +21,20 @@
 
 
     
-        <form method = "POST" action="{{ url_for("upload_file") }}" enctype="multipart/form-data">
+        <form method = "POST" action="{{ url_for("upload_file") }}" name="upload" enctype="multipart/form-data">
             <input type="file" name="file" />
             <input type="text" name="fileName">
-            <input type="submit" id="upload" value="Upload" />
+            <input type="submit" name="upload" value="Upload" />
         </form>
         
         <div>
-            <p> Choose a file to visualise </p>
-            <select id="File-Dropdown"></select>
-            <p id="test"> </p>
+
+
+            <form method = "POST" action="{{ url_for("getData") }}" enctype="multipart/form-data">
+                <p> Choose a file to visualise </p>
+                <select id="File-Dropdown" name="File-Dropdown"></select>
+                <input type="submit" name="visualize" value="Visualize" />
+            </form>
             <script type="text/javascript">
                 window.onload = ShowDropdown();
 

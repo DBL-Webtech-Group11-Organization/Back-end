@@ -6,6 +6,8 @@ import flask
 from flask import Flask, redirect, url_for, render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
 import json
+from extract_csv import extract_data
+import numpy as np
 
 upload_folder = join(dirname(realpath(__file__)), 'csv_files/')
 
@@ -38,7 +40,7 @@ def testbutton():                           #Function you want to define in the 
     else:
         return "Did not work"
 
-@app.route('/Visualisation', methods=['GET','POST'])
+@app.route('/upload_file', methods=['GET','POST'])
 def upload_file():
     if request.method == 'POST':
         uploadname = request.form['fileName']
@@ -54,10 +56,24 @@ def upload_file():
             csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             uploadedFiles.append(uploaded_file)
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload file to correct position
+            return render_template('Visualisation.html', Arraynames = csvFilesName)
 
-        return render_template('Visualisation.html', Arraynames = csvFilesName)
-    return render_template('Visualisation')
-    
+    return render_template('Visualisation.html', Arraynames = csvFilesName)
+
+@app.route('/getData', methods=['GET','POST'])
+def getData():
+    if request.method == 'POST':
+        fileSelect = request.form.get('File-Dropdown')
+        filePath = ""
+        if fileSelect in csvFilesName:
+            index = csvFilesName.index(fileSelect)
+            filePath = csvFilesPos[index]
+
+
+        data = extract_data(filePath)
+        print(data,file=sys.stderr)
+    return render_template('Visualisation.html',Arraynames = csvFilesName)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
