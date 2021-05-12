@@ -1,8 +1,11 @@
 import os
 import sys
 from os.path import join, dirname, realpath
+
+import flask
 from flask import Flask, redirect, url_for, render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
+import json
 
 upload_folder = join(dirname(realpath(__file__)), 'csv_files/')
 
@@ -10,6 +13,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = upload_folder
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 
+uploadedFiles = []
 csvFilesPos = []
 csvFilesName = []
 
@@ -20,7 +24,7 @@ def home():
 
 @app.route("/<name>")               # This allows the user to go to different pages instead of the homepage
 def user(name):                     # essentially it takes .../x the x as input and loads file x (for example: 127.0.0.1:5000/Indexpage.html loads Indexpage.html)
-    return render_template({name})
+    return render_template({name}, Arraynames = csvFilesName)
 
 # @app.route("/admin")  # This can be used to redirect user (for example now it redirects url/admin to url.)
 # def admin():          # not very relevant for us yet.
@@ -48,8 +52,9 @@ def upload_file():
 
             csvFilesName.append(uploadname)
             csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+            uploadedFiles.append(uploaded_file)
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload file to correct position
+
         return render_template('Visualisation.html', Arraynames = csvFilesName)
     return render_template('Visualisation')
     

@@ -29,21 +29,24 @@
         
         <div>
             <p> Choose a file to visualise </p>
-            <p id ='Buttons'></p>
-
+            <select id="File-Dropdown"></select>
+            <p id="test"> </p>
             <script type="text/javascript">
-                window.onload = ShowNameButton();
+                window.onload = ShowDropdown();
 
-                function ShowNameButton(){
-                    var nameArray = '{{Arraynames}}';
-                    
-                    var i;
-                    for (i=0; i < nameArray.length; i++){
-                        var button = document.createElement("button");
-                        var text = nameArray[i];
-                        document.getElementById("Buttons").appendChild(button);
-                        button.innerHTML = text;                        
+                function ShowDropdown(){
+
+                    var filesnames = {{ Arraynames|tojson }};
+                    var select = document.getElementById("File-Dropdown");
+
+                    for (let i = 0; i < filesnames.length; i++){
+                        var opt = filesnames[i];
+                        var el = document.createElement("option");
+                        el.textContent = opt;
+                        el.value = opt;
+                        select.appendChild(el);
                     }
+
                 }
                 
 
