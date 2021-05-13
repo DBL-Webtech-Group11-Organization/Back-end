@@ -6,7 +6,10 @@ import flask
 from flask import Flask, redirect, url_for, render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
 import json
+import pandas as pd
 from extract_csv import extract_data
+from Visualizations import makeMatrix, makeGraphs
+from PIL import Image
 import numpy as np
 
 upload_folder = join(dirname(realpath(__file__)), 'csv_files/')
@@ -72,7 +75,7 @@ def getData():
 
         #Get the data from the csv file
         data = extract_data(filePath)
-        print(data,file=sys.stderr)
+        print(makeMatrix(data),sys.stderr)
     return render_template('Visualisation.html',Arraynames = csvFilesName)
 
 
