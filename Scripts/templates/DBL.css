@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
 
 .Background {
     text-align: center;
-    font-family: 'PT Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: white;
+    
 }
 .all{
-background-color: #00b6da;
-}
+    background-color: #00b6da;
+    }
 
 a { 
     color: white; 
@@ -41,4 +43,15 @@ a:hover {
     text-align: center;
 }
     
-    
+.group{
+    font-family: 'PT Sans', sans-serif;
+    color: white;
+}
+
+.groupinfo{
+    text-decoration: underline;
+}
+.members{
+    font-family: 'PT Sans', sans-serif;
+    font-weight: bold;
+}
