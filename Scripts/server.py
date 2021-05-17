@@ -53,8 +53,10 @@ def upload_file():
         if filename != '':                                      #Check if filename is not empty
             file_ext = os.path.splitext(filename)[1]                #Split the extensions
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:     #Check if it is a valid extension
+                #TODO Show message about wrong file and reload page
                 abort(400)
 
+            # TODO Check for same name and if so give error that file already uploaded
             csvFilesName.append(uploadname) #Add the upload name to the array
             csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload the path to the array
             uploadedFiles.append(uploaded_file) #upload the file to the uploaded files
