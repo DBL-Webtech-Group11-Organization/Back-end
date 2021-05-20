@@ -11,6 +11,9 @@ from extract_csv import extract_data
 from Visualizations import makeMatrix, makeGraphs
 from PIL import Image
 import numpy as np
+import asyncio
+import time
+import threading
 
 upload_folder = join(dirname(realpath(__file__)), 'csv_files/')
 
@@ -67,6 +70,7 @@ def upload_file():
 
 @app.route('/getData', methods=['GET','POST'])
 def getData():
+
     if request.method == 'POST':
         fileSelect = request.form.get('File-Dropdown') #Get which files the person selected
         filePath = "" #create an empty path
@@ -77,8 +81,16 @@ def getData():
 
         #Get the data from the csv file
         data = extract_data(filePath)
-        print(makeMatrix(data),sys.stderr)
-    return render_template('Visualisation.html',Arraynames = csvFilesName)
+
+        #Process data asynchronous
+        asyncio.set_event_loop(asyncio.new_event_loop())
+        loop = asyncio.get_event_loop()
+        converted_data = loop.run_until_complete(makeGraphs(data))
+
+
+        #print(makeMatrix(data),sys.stderr)
+        #print(makeGraphs(data),sys.stderr)
+    return render_template('Visualisation.html',Arraynames = csvFilesName, data = converted_data)
 
 
 if __name__ == "__main__":
