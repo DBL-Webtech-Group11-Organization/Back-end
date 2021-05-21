@@ -9,6 +9,10 @@ async def makeGraphs(data):
     dict_mail_traffic = await dict_mail_traffic_calculate(data_0)
     return await calculate_values_per_year(unique_years, dict_mail_traffic)
 
+async def forceDirectedGraph(data):
+    list_from_emails = await extract_column(data, 2)
+    list_to_emails = await extract_column(data, 5)
+    return list_from_emails, list_to_emails
 
 def makeMatrix(data):
     #We have to first find how many ID's we have in the file

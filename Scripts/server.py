@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 import json
 import pandas as pd
 from extract_csv import extract_data
-from Visualizations import makeMatrix, makeGraphs
+from Visualizations import *
 from PIL import Image
 import numpy as np
 import asyncio
@@ -86,11 +86,14 @@ def getData():
         asyncio.set_event_loop(asyncio.new_event_loop())
         loop = asyncio.get_event_loop()
         converted_data = loop.run_until_complete(makeGraphs(data))
+        force_graph_data = loop.run_until_complete(forceDirectedGraph(data))
+
 
 
         #print(makeMatrix(data),sys.stderr)
         #print(makeGraphs(data),sys.stderr)
-    return render_template('Visualisation.html',Arraynames = csvFilesName, data = converted_data)
+    return render_template('Visualisation.html',Arraynames = csvFilesName, data = converted_data,
+                           force_graph_data = force_graph_data)
 
 
 if __name__ == "__main__":
