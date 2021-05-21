@@ -9,7 +9,6 @@ import json
 import pandas as pd
 from extract_csv import extract_data
 from Visualizations import *
-from PIL import Image
 import numpy as np
 import asyncio
 import time
