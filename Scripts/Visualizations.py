@@ -31,6 +31,10 @@ def makeMatrix(data):
         for j in range(len(data)):
             if i == data[j][1]:
                 mailMatrix[data[j][4] - 1][i - 1] += 1
+
+    mailList = mailMatrix.tolist()
+
+
     return mailMatrix
 
 

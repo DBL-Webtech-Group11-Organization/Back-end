@@ -3,8 +3,9 @@ import sys
 from os.path import join, dirname, realpath
 
 import flask
-from flask import Flask, redirect, url_for, render_template, request, send_from_directory
+from flask import Flask, redirect, url_for, render_template, request, send_from_directory, flash, session
 from werkzeug.utils import secure_filename
+from flask_session import Session
 import json
 import pandas as pd
 from extract_csv import extract_data
@@ -20,10 +21,23 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = upload_folder
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+Session(app)
+
 uploadedFiles = []
 csvFilesPos = []
 csvFilesName = []
 
+
+@app.route('/set/')
+def set():
+    session['key'] = 'value'
+    return 'ok'
+
+@app.route('/get/')
+def get():
+    return session.get('key', 'not set')
 
 @app.route("/")  # Here the main page is defined
 def home():
@@ -55,8 +69,8 @@ def upload_file():
         if filename != '':                                      #Check if filename is not empty
             file_ext = os.path.splitext(filename)[1]                #Split the extensions
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:     #Check if it is a valid extension
-                #TODO Show message about wrong file and reload page
-                abort(400)
+                flash("This extension is not supported")
+                return render_template('Visualisation.html', Arraynames=csvFilesName)
 
             # TODO Check for same name and if so give error that file already uploaded
             csvFilesName.append(uploadname) #Add the upload name to the array
