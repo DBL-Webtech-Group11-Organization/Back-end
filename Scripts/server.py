@@ -25,9 +25,9 @@ SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
 Session(app)
 
-uploadedFiles = []
+uploadedFileName = []
 csvFilesPos = []
-csvFilesName = []
+csvFilesUserName = []
 
 
 @app.route('/set/')
@@ -45,7 +45,7 @@ def home():
 
 @app.route("/<name>")               # This allows the user to go to different pages instead of the homepage
 def user(name):                     # essentially it takes .../x the x as input and loads file x (for example: 127.0.0.1:5000/Indexpage.html loads Indexpage.html)
-    return render_template({name}, Arraynames = csvFilesName)
+    return render_template({name}, Arraynames = csvFilesUserName)
 
 # @app.route("/admin")  # This can be used to redirect user (for example now it redirects url/admin to url.)
 # def admin():          # not very relevant for us yet.
@@ -70,16 +70,21 @@ def upload_file():
             file_ext = os.path.splitext(filename)[1]                #Split the extensions
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:     #Check if it is a valid extension
                 flash("This extension is not supported")
-                return render_template('Visualisation.html', Arraynames=csvFilesName)
+                return render_template('Visualisation.html', Arraynames=csvFilesUserName)
 
-            # TODO Check for same name and if so give error that file already uploaded
-            csvFilesName.append(uploadname) #Add the upload name to the array
+            if filename in uploadedFileName:
+                flash("This file is already uploaded")
+                return render_template('Visualisation.html', Arraynames=csvFilesUserName)
+            if uploadname in csvFilesUserName:
+                flash("This name has already been used")
+                return render_template('Visualisation.html', Arraynames=csvFilesUserName)
+            csvFilesUserName.append(uploadname) #Add the upload name to the array
             csvFilesPos.append(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload the path to the array
-            uploadedFiles.append(uploaded_file) #upload the file to the uploaded files
+            uploadedFileName.append(filename) #upload the file to the uploaded files
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload file to correct position
-            return render_template('Visualisation.html', Arraynames = csvFilesName)
+            return render_template('Visualisation.html', Arraynames = csvFilesUserName)
 
-    return render_template('Visualisation.html', Arraynames = csvFilesName)
+    return render_template('Visualisation.html', Arraynames = csvFilesUserName)
 
 @app.route('/getData', methods=['GET','POST'])
 def getData():
@@ -87,9 +92,9 @@ def getData():
     if request.method == 'POST':
         fileSelect = request.form.get('File-Dropdown') #Get which files the person selected
         filePath = "" #create an empty path
-        if fileSelect in csvFilesName: #Check if the selected file was uploaded
+        if fileSelect in csvFilesUserName: #Check if the selected file was uploaded
             # Get the index of the selected file and add the filepath to the variable
-            index = csvFilesName.index(fileSelect)
+            index = csvFilesUserName.index(fileSelect)
             filePath = csvFilesPos[index]
 
         #Get the data from the csv file
@@ -105,7 +110,7 @@ def getData():
 
         #print(makeMatrix(data),sys.stderr)
         #print(makeGraphs(data),sys.stderr)
-    return render_template('Visualisation.html',Arraynames = csvFilesName, data = converted_data,
+    return render_template('Visualisation.html',Arraynames = csvFilesUserName, data = converted_data,
                            force_graph_data = force_graph_data)
 
 
