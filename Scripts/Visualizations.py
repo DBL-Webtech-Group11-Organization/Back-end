@@ -12,7 +12,7 @@ async def makeGraphs(data):
 async def forceDirectedGraph(data):
     list_from_emails = await extract_column(data, 2)
     list_to_emails = await extract_column(data, 5)
-    return list_from_emails, list_to_emails
+    return [list_from_emails, list_to_emails]
 
 def makeMatrix(data):
     #We have to first find how many ID's we have in the file

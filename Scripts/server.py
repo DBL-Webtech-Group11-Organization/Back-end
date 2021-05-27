@@ -29,6 +29,12 @@ uploadedFileName = []
 csvFilesPos = []
 csvFilesUserName = []
 
+PEOPLE_FOLDER = os.path.join('static', 'people_photo')
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
+
+
 
 @app.route('/set/')
 def set():
@@ -58,6 +64,11 @@ def testbutton():                           #Function you want to define in the 
         return render_template("Indexpage.html", testvariable = pong)              #Type pong on site
     else:
         return "Did not work"
+
+@app.route('/Groupinfo.html')
+def show_people():
+    full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'Naomi_Han.jpg')
+    return render_template("Groupinfo.html", user_image=full_filename)
 
 @app.route('/upload_file', methods=['GET','POST'])
 def upload_file():
@@ -103,15 +114,15 @@ def getData():
         #Process data asynchronous
         asyncio.set_event_loop(asyncio.new_event_loop())
         loop = asyncio.get_event_loop()
-        converted_data = loop.run_until_complete(makeGraphs(data))
-        force_graph_data = loop.run_until_complete(forceDirectedGraph(data))
+        barchart_data = loop.run_until_complete(makeGraphs(data))
+        forcegraph_data = loop.run_until_complete(forceDirectedGraph(data))
 
 
 
         #print(makeMatrix(data),sys.stderr)
         #print(makeGraphs(data),sys.stderr)
-    return render_template('Visualisation.html',Arraynames = csvFilesUserName, data = converted_data,
-                           force_graph_data = force_graph_data)
+    return render_template('Visualisation.html',Arraynames = csvFilesUserName, data = barchart_data,
+                           force_graph_data = forcegraph_data)
 
 
 if __name__ == "__main__":
