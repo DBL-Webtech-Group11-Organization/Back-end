@@ -31,8 +31,8 @@ csvFilesUserName = []
 
 PEOPLE_FOLDER = os.path.join('static', 'people_photo')
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
+#app = Flask(__name__)
+#app.config['PHOTO_FOLDER'] = PEOPLE_FOLDER
 
 
 
@@ -67,7 +67,7 @@ def testbutton():                           #Function you want to define in the 
 
 @app.route('/Groupinfo.html')
 def show_people():
-    full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'Naomi_Han.jpg')
+    full_filename = os.path.join(app.config['PHOTO_FOLDER'], 'Naomi_Han.jpg')
     return render_template("Groupinfo.html", user_image=full_filename)
 
 @app.route('/upload_file', methods=['GET','POST'])
@@ -114,15 +114,19 @@ def getData():
         #Process data asynchronous
         asyncio.set_event_loop(asyncio.new_event_loop())
         loop = asyncio.get_event_loop()
-        barchart_data = loop.run_until_complete(makeGraphs(data))
+
+        # HERE YOU CAN RETRIEVE NEW DATA FROM THE SHEET
+        # ADD THE VARIABLE IN THE LINES BELOW AND RETURN IT AS var1 = var1
+        # THEN ON THE HTML FILES YOU CAN LOAD {{ var1 }} as value in graphs/plots
+        barchart_data = 0  # loop.run_until_complete(makeGraphs(data)) not loaded because it makes the site too slow
         forcegraph_data = loop.run_until_complete(forceDirectedGraph(data))
 
 
 
         #print(makeMatrix(data),sys.stderr)
         #print(makeGraphs(data),sys.stderr)
-    return render_template('Visualisation.html',Arraynames = csvFilesUserName, data = barchart_data,
-                           force_graph_data = forcegraph_data)
+    return render_template('Visualisation.html',Arraynames = csvFilesUserName, barchart_data = barchart_data,
+                           forcegraph_data = forcegraph_data)
 
 
 if __name__ == "__main__":
