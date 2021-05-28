@@ -1,3 +1,5 @@
+Test
+
 We are group 11, and this is our prototype for the data visualization website
 
 To start the website you will need to execute server.py. but before you can do this you will need all the extensions
