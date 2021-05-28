@@ -1,4 +1,4 @@
-Testtest
+Test
 
 We are group 11, and this is our prototype for the data visualization website
 
